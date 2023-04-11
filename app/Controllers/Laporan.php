@@ -94,7 +94,7 @@ class Laporan extends BaseController
             ";
             
             else:
-                $view .="<tr ><td>-</td></tr>
+                $view .="<tr ><td  style=\"border-bottom:0px solid\">-</td></tr>
                 ";
             endif;
             
