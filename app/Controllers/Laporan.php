@@ -33,61 +33,75 @@ class Laporan extends BaseController
         $where= "jabatan.klompeg_id=$klompegId";
         $pegawai = $this->mPegawai->tampilUrutJabatan($where);
         
-        $view = "<p style=\"font-size:10pt; font-weight:bold;\">RINCIAN SPD PEGAWAI ".strtoupper(bulan(substr($bulan,5,2))).' '.substr($bulan,0,4)."  </p>
-                <table class=\"main-table \" width=\"100%\">
-                    <thead>
-                    <tr>
-                        <th>No</th> 
-                        <th>Nama dan Rincian</th> 
-                    </tr>
-                    </thead>
-                    ";
+        $view = "
+        <p style=\"font-size:10pt; font-weight:bold;\">RINCIAN SPD PEGAWAI ".strtoupper(bulan(substr($bulan,5,2))).' '.substr($bulan,0,4)."  </p>
+        <table class=\"main-table \" width=\"100%\">
+            <thead>
+            <tr>
+                <th>No</th> 
+                <th>Nama dan Rincian</th> 
+            </tr>
+            </thead>
+            ";
         
         $no = 1;
         foreach ($pegawai as $rowPegawai):
             $view .="
-                    <tr>
-                        <td rowspan=\"2\" align=\"center\">".$no++."</td>
-                        <td style=\"border-bottom:0px solid\">".$rowPegawai['nama']."</td>
-                    </tr>
-                    <tr>
-                        <td style=\"border-top:0px solid\">
-                        <table width=\"100%\" class=\"table-border-0\" >
-                            <tr style=\"background-color:#dfdfdf; \">
-                                <td width=\"0.6cm\">No</td>
-                                <td>Keperluan</td>
-                                <td width=\"4cm\">Masa Dinas</td>
-                                <td width=\"3cm\">Formulir</td>
-                            </tr>
-                        ";
-            
-                        $stPersonil = $this->mSTPersonil->where('pegawai_id', $rowPegawai['id_pegawai'])->findAll();
-                        $i=1;
-                        foreach($stPersonil as $rowSTPersonil):
-                            $spd =  $this->mSpd->where('st_personil_id', $rowSTPersonil['id_st_personil'])->findAll();
-                            $st = $this->mSuratTugas->where('id_st', $rowSTPersonil['surat_tugas_id'])->first();
-                            foreach($spd as $spd):
-                                if ($i % 2 == 0){ $color = "style=\"background-color:#80ff80\"";}else{$color=NULL;}
-                            $view .="<tr ".$color." >
-                                        <td>".$i++."</td>
-                                        <td>".$st['perihal_st']."</td>
-                                        <td>".$st['tanggal_berangkat']." s.d ".$st['tanggal_kembali'] ."</td>
-                                        <td>".$spd['jenis_formulir']."</td>
-                                    </tr>
-                            ";
+            <tr>
+                <td rowspan=\"2\" align=\"center\">".$no++."</td>
+                <td style=\"border-bottom:0px solid\">".$rowPegawai['nama']."</td>
+            </tr>
+            ";
+    
+            $stPersonil = $this->mSTPersonil->where('pegawai_id', $rowPegawai['id_pegawai'])->findAll();
+            $countStPersonil = $this->mSTPersonil->where('pegawai_id', $rowPegawai['id_pegawai'])->countAllResults();
 
-                            endforeach;
+            if( $countStPersonil != 0 ):
+            $view .="
+            <tr>
+                <td style=\"border-top:0px solid\">
+                    <table width=\"100%\" class=\"table-border-0\" >
+                        <tr style=\"background-color:#dfdfdf; \">
+                            <td width=\"0.6cm\">No</td>
+                            <td>Keperluan</td>
+                            <td width=\"4cm\">Masa Dinas</td>
+                            <td width=\"3cm\">Formul22ir</td>
+                        </tr>
+                    ";
+                    $i=1;
+                    foreach($stPersonil as $rowSTPersonil):
+                        $spd =  $this->mSpd->where('st_personil_id', $rowSTPersonil['id_st_personil'])->findAll();
+                        $st = $this->mSuratTugas->where('id_st', $rowSTPersonil['surat_tugas_id'])->first();
+                        foreach($spd as $spd):
+                            if ($i % 2 == 0){ $color = "style=\"background-color:#80ff80\"";}else{$color=NULL;}
+                        $view .="
+                        
+                        <tr ".$color." >
+                            <td>".$i++."</td>
+                            <td>".$st['perihal_st']."</td>
+                            <td>".$st['tanggal_berangkat']." s.d ".$st['tanggal_kembali'] ."</td>
+                            <td>".$spd['jenis_formulir']."</td>
+                        </tr>
+                        ";
+
                         endforeach;
-                
-            $view .="   </table>
-                        </td>
-                    </tr>
-                   ";
+                    endforeach;
+                    
+                    $view .="   
+                    </table>
+                </td>
+            </tr>
+            ";
+            
+            else:
+                $view .="<tr ><td>-</td></tr>
+                ";
+            endif;
             
         endforeach;
 
-        $view .=" </table>
-                    ";
+        $view .=" 
+        </table>";
 
         $data = [
             'instansi' => config('site')->instansi,
