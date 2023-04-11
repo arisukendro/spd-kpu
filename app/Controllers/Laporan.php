@@ -392,8 +392,7 @@ class Laporan extends BaseController
                     <thead>
                         <tr>
                             <th>No</th> 
-                            <th>No ST</th>
-                            <th>Tanggal</th>
+                            <th>Nomor ST</th>
                             <th>Perihal</th>
                             <th>Lokasi Tujuan</th>
                             <th>Personil</th>
@@ -408,36 +407,43 @@ class Laporan extends BaseController
                 ->findAll();
                 
         foreach ($st as $rowST):
-            $stPersonil = $this->mSTPersonil->where('surat_tugas_id', $rowST['id_st'])->first();
-            $stLokasi = $this->mSTLokasi->where('surat_tugas_id', $rowST['id_st'])->first();
-
-             //dapetin lokasi
-                                
-                            
+       
             $view .="
                     <tr>
                         <td align=\"center\">".$no++."</td>
-                        <td >".$rowST['nomor_st']."</td>
-                        <td align=\"center\">".$rowST['tanggal_st']."</td>
+                        <td >".$rowST['nomor_st']."<br>Tanggal: ".
+                                $rowST['tanggal_st'].
+                        "</td>
                         <td >".$rowST['perihal_st']."</td>
                         <td >";
 
                            $st_lokasi = $this->mSTLokasi->like('surat_tugas_id' , $rowST['id_st'])->findAll();
                            $jml_lokasi = $this->mSTLokasi->like('surat_tugas_id' , $rowST['id_st'])->countAllResults();
                                 
-                                $x =1; 
-                                foreach ($st_lokasi as $lok) :
-                                   if($jml_lokasi > 1) {
-                                    $view .= $x++. '. '.$lok['nama_lokasi'].' ' ; 
-                                   }else {
-                                    $view .= $lok['nama_lokasi'] ;
-
-                                   }
-
-                                endforeach;
+                            $x =1; 
+                            foreach ($st_lokasi as $lok) :
+                                if($jml_lokasi > 1) {
+                                $view .= $x++. '. '.$lok['nama_lokasi'].'<br>' ; 
+                                }else {
+                                $view .= $lok['nama_lokasi'] ;
+                                }
+                            endforeach;
                         
             $view .="   </td>
-                        <td >".$stPersonil['nama']."</td>
+                        <td >";
+                        $stPersonil = $this->mSTPersonil->where('surat_tugas_id', $rowST['id_st'])->findAll();
+                        $jmlPersonil = $this->mSTPersonil->where('surat_tugas_id', $rowST['id_st'])->countAllResults();
+                        
+                        $y =1; 
+                        foreach ($stPersonil as $pers) :
+                            if($jmlPersonil > 1) {
+                            $view .= $y++. '. '.$pers['nama'].'<br>' ; 
+                            }else {
+                            $view .= $pers['nama'] ;
+                            }
+                        endforeach;
+
+            $view .=" </td>
                     </tr>
                    ";
             
