@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<head>
+
+    <style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        /* font-family: "Times New Roman", Times, serif; */
+    }
+    </style>
+</head>
+
 <body>
     <table width="100%" style="padding-top:-25px">
         <?php if ($jenis_st == "ketua") : ?>
