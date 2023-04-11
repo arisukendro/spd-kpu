@@ -49,7 +49,7 @@ class Laporan extends BaseController
             $view .="
             <tr>
                 <td rowspan=\"2\" align=\"center\">".$no++."</td>
-                <td style=\"border-bottom:0px solid\">".$rowPegawai['nama']."</td>
+                <td style=\"border-bottom:0px solid\">".$rowPegawai['nama']." <i>(NIP. ".$rowPegawai['nip'] .")</i></td>
             </tr>
             ";
     
@@ -62,10 +62,10 @@ class Laporan extends BaseController
                 <td style=\"border-top:0px solid\">
                     <table width=\"100%\" class=\"table-border-0\" >
                         <tr style=\"background-color:#dfdfdf; \">
-                            <td width=\"0.6cm\">No</td>
+                            <td width=\"6%\">No</td>
                             <td>Keperluan</td>
-                            <td width=\"4cm\">Masa Dinas</td>
-                            <td width=\"3cm\">Formul22ir</td>
+                            <td width=\"15%\">Masa Dinas</td>
+                            <td width=\"13%\">Formulir</td>
                         </tr>
                     ";
                     $i=1;
