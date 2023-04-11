@@ -28,7 +28,7 @@ class Home extends BaseController
         
         $data = [
             'title_page' => "Dashboard",
-            'st_terbaru' => $this->mSuratTugas->orderBy('tanggal_st','desc')->limit(5)->findAll(),
+            'st_terbaru' => $this->mSuratTugas->orderBy('tanggal_st','desc')->limit(5)->orderBy('id_st','DESC')->findAll(),
             'jml_pegawai' => $this->mPegawai->countAllResults(),
             'jml_lokasi' => $this->mLokasi->countAllResults(),
             'jml_st' => $this->mSuratTugas->like('tanggal_st', date('Y'), 'right')->countAllResults(),
